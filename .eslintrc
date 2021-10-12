@@ -1,0 +1,36 @@
+{
+  "extends": ["react-app", "eslint:recommended"],
+  "settings": {
+    "import/resolver": {
+      "node": {
+        "paths": ["src"]
+      }
+    }
+  },
+  "rules": {
+    "semi": ["error", "never"],
+    "no-unused-vars": "warn",
+    "prefer-promise-reject-errors": "off",
+    "no-plusplus": [
+      "error",
+      {
+        "allowForLoopAfterthoughts": true
+      }
+    ],
+    "react/sort-prop-types": "error",
+    "react/forbid-prop-types": "off",
+    "react/no-direct-mutation-state": "error",
+    "import/no-extraneous-dependencies": [
+      "error",
+      {
+        "devDependencies": true
+      }
+    ],
+    "react/jsx-filename-extension": [
+      1,
+      {
+        "extensions": [".tsx"]
+      }
+    ]
+  }
+}
