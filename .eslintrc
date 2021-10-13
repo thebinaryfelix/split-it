@@ -7,7 +7,7 @@
       "jsx": true
     }
   },
-  "extends": ["react-app", "eslint:recommended"],
+  "extends": ["react-app", "eslint:recommended", "plugin:@typescript-eslint/recommended"],
   "settings": {
     "react": {
       "version": "detect"

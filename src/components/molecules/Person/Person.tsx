@@ -1,6 +1,10 @@
-import { Card, CardContent, Typography } from '@material-ui/core'
-import { IPerson } from '@types'
+import { Card, CardContent, Typography } from '@mui/material'
 import NumberFormat from 'react-number-format'
+
+interface IPerson {
+  amount: number
+  name: string
+}
 
 const Person = ({ amount, name }: IPerson) => (
   <Card>
@@ -10,10 +14,11 @@ const Person = ({ amount, name }: IPerson) => (
       </Typography>
 
       <NumberFormat
-        prefix="R$"
-        value={amount}
+        prefix="R$ "
         type="text"
         displayType="text"
+        value={amount.toFixed(2)}
+        allowNegative={false}
         renderText={(formattedValue: string) => (
           <Typography color="text.secondary" fontSize="large">
             {formattedValue}
@@ -23,5 +28,9 @@ const Person = ({ amount, name }: IPerson) => (
     </CardContent>
   </Card>
 )
+
+Person.defaultProps = {
+  onClick: () => null,
+}
 
 export default Person

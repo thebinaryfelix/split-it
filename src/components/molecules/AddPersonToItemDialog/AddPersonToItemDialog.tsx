@@ -1,4 +1,4 @@
-import { Button, Dialog, DialogTitle, Typography } from '@material-ui/core'
+import { Box, Dialog, DialogTitle, Typography, Grid, Paper, IconButton } from '@mui/material'
 import AddIcon from '@mui/icons-material/Add'
 
 interface IAddPersonToItemDialogProps {
@@ -13,15 +13,24 @@ const AddPersonToItemDialog = ({ open, onClose, onSubmit, names }: IAddPersonToI
     <Dialog onClose={onClose} open={open}>
       <DialogTitle>Quem consumiu esse item?</DialogTitle>
 
-      {Boolean(names?.length) &&
-        names.map(name => (
-          <div key={name}>
-            <Typography key={name}>{name}</Typography>
-            <Button onClick={() => onSubmit(name)} size="small">
-              <AddIcon />
-            </Button>
-          </div>
-        ))}
+      <Box p={2}>
+        <Grid container spacing={2}>
+          {Boolean(names?.length) &&
+            names.map(name => (
+              <Grid key={name} item xs={4}>
+                <Paper>
+                  <Box p={2}>
+                    <IconButton onClick={() => onSubmit(name)}>
+                      <AddIcon />
+                    </IconButton>
+
+                    <Typography>{name}</Typography>
+                  </Box>
+                </Paper>
+              </Grid>
+            ))}
+        </Grid>
+      </Box>
     </Dialog>
   )
 }
