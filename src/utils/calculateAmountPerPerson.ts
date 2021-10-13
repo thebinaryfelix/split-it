@@ -23,7 +23,7 @@ const calculateAmountPerPerson = (table: ITable, items: IItem[]): ITable => {
         const valuePerPerson = currentItem.value / amountOfPeopleSharingTheItem
 
         if (personInfo.amount) {
-          personInfo.amount = personInfo.amount + valuePerPerson
+          personInfo.amount += valuePerPerson
         } else {
           personInfo.amount = valuePerPerson
         }
@@ -36,8 +36,6 @@ const calculateAmountPerPerson = (table: ITable, items: IItem[]): ITable => {
       }
     }
   }
-
-  console.log(newTable, table, items)
 
   return { ...newTable }
 }

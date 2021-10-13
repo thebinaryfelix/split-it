@@ -21,9 +21,9 @@
   },
   "rules": {
     "semi": ["error", "never"],
-    "@typescript-eslint/explicit-module-boundary-types": "off",
     "no-unused-vars": "warn",
     "prefer-promise-reject-errors": "off",
+    "@typescript-eslint/explicit-module-boundary-types": "off",
     "no-plusplus": [
       "error",
       {
@@ -33,6 +33,7 @@
     "react/sort-prop-types": "error",
     "react/forbid-prop-types": "off",
     "react/no-direct-mutation-state": "error",
+    "no-console": "warn",
     "import/no-extraneous-dependencies": [
       "error",
       {
