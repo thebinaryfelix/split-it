@@ -1,9 +1,7 @@
-import { IItem, ITable } from 'App'
-
-interface NewTable extends ITable {}
+import { IItem, ITable } from 'components/pages/Home/Home'
 
 const calculateAmountPerPerson = (table: ITable, items: IItem[]): ITable => {
-  const newTable: NewTable = {}
+  const newTable: ITable = {}
   const tableKeys = Object.keys(table)
 
   for (let tableIndex = 0; tableIndex < tableKeys.length; tableIndex += 1) {
@@ -29,9 +27,17 @@ const calculateAmountPerPerson = (table: ITable, items: IItem[]): ITable => {
         } else {
           personInfo.amount = valuePerPerson
         }
+      } else {
+        const isNewPerson = Boolean(!newTable[personName])
+
+        if (isNewPerson) {
+          newTable[personName] = { amount: 0 }
+        }
       }
     }
   }
+
+  console.log(newTable, table, items)
 
   return { ...newTable }
 }

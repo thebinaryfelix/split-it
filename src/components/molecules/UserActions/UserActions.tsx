@@ -1,4 +1,4 @@
-import { Box, SpeedDial, SpeedDialAction, SpeedDialIcon } from '@material-ui/core'
+import { Box, SpeedDial, SpeedDialAction, SpeedDialIcon } from '@mui/material'
 import React from 'react'
 
 interface IAction {
@@ -13,12 +13,8 @@ interface IUserActionsProps {
 
 const UserActions = ({ actions }: IUserActionsProps) => {
   return (
-    <Box sx={{ height: 320, transform: 'translateZ(0px)', flexGrow: 1 }}>
-      <SpeedDial
-        ariaLabel="Ações"
-        sx={{ position: 'absolute', bottom: 16, right: 16 }}
-        icon={<SpeedDialIcon />}
-      >
+    <Box sx={{ position: 'fixed', bottom: 16, right: 16 }}>
+      <SpeedDial ariaLabel="Ações" icon={<SpeedDialIcon />}>
         {actions.map(action => (
           <SpeedDialAction
             key={action.name}
