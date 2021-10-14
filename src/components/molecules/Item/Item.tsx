@@ -15,7 +15,7 @@ import ExpandMoreIcon from '@mui/icons-material/ExpandMore'
 import DeleteIcon from '@mui/icons-material/Delete'
 import AddPersonToItemDialog from '../AddPersonToItemDialog'
 import { deleteProduct, updateProduct } from 'services/product'
-import { IPerson } from 'db/localStorage'
+import { IPerson } from 'db/interfaces'
 
 interface ItemProps {
   id: string

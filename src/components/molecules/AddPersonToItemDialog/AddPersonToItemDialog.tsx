@@ -1,6 +1,6 @@
 import { Box, Dialog, DialogTitle, Typography, Grid, Paper, IconButton } from '@mui/material'
 import AddIcon from '@mui/icons-material/Add'
-import { IPerson } from 'db/localStorage'
+import { IPerson } from 'db/interfaces'
 import { getPersons } from 'services/person'
 import { useEffect, useState } from 'react'
 

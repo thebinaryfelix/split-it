@@ -1,5 +1,5 @@
 import { Card, CardContent, Typography } from '@mui/material'
-import { IPerson } from 'db/localStorage'
+import { IPerson } from 'db/interfaces'
 import NumberFormat from 'react-number-format'
 
 const Person = ({ id, amount, name }: IPerson) => (

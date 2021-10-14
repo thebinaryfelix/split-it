@@ -3,7 +3,7 @@ import { Grid } from '@mui/material'
 import { useForm } from 'react-hook-form'
 import { yupResolver } from '@hookform/resolvers/yup'
 import * as yup from 'yup'
-import { ICreateProduct } from 'db/localStorage'
+import { ICreateProduct } from 'db/interfaces'
 
 interface INewItemDialogProps {
   open: boolean

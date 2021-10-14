@@ -1,5 +1,6 @@
-import { getItem, ICreatePerson, IPerson, IUpdatePerson, setItem, workspace } from 'db/localStorage'
 import { v4 as uuidv4 } from 'uuid'
+import { ICreatePerson, IPerson, IUpdatePerson } from 'db/interfaces'
+import { getItem, setItem, workspace } from 'db/localStorage'
 
 const personsPath = `${workspace}.persons`
 

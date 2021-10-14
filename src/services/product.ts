@@ -1,13 +1,6 @@
 import { v4 as uuidv4 } from 'uuid'
-import {
-  getItem,
-  setItem,
-  workspace,
-  IProduct,
-  ICreateProduct,
-  IUpdateProduct,
-  IProductPopulated,
-} from 'db/localStorage'
+import { getItem, setItem, workspace } from 'db/localStorage'
+import { ICreateProduct, IProduct, IProductPopulated, IUpdateProduct } from 'db/interfaces'
 import { getPerson } from './person'
 
 const productsPath = `${workspace}.products`

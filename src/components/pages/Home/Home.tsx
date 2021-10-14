@@ -12,22 +12,8 @@ import UserActions from 'components/molecules/UserActions/UserActions'
 
 import { createPerson, getPersons } from 'services/person'
 import { createProduct, getPopulatedProducts } from 'services/product'
-import { ICreatePerson, ICreateProduct, IPerson, IProductPopulated } from 'db/localStorage'
+import { ICreatePerson, ICreateProduct, IPerson, IProductPopulated } from 'db/interfaces'
 import calculateAmountPerPerson from 'utils/calculateAmountPerPerson'
-
-export interface IItem {
-  title: string
-  value: number
-  names: string[]
-}
-
-export interface IPersonTableInfo {
-  amount: number
-}
-
-export interface ITable {
-  [key: string]: IPersonTableInfo
-}
 
 const Home = () => {
   const [products, setProducts] = useState<IProductPopulated[]>([])
