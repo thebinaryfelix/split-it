@@ -1,12 +1,8 @@
 import { Card, CardContent, Typography } from '@mui/material'
+import { IPerson } from 'db/localStorage'
 import NumberFormat from 'react-number-format'
 
-interface IPerson {
-  amount: number
-  name: string
-}
-
-const Person = ({ amount, name }: IPerson) => (
+const Person = ({ id, amount, name }: IPerson) => (
   <Card>
     <CardContent>
       <Typography color="text.secondary" fontSize="small">

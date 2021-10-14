@@ -1,43 +1,47 @@
-import { IItem, ITable } from 'components/pages/Home/Home'
+import { getPersons, updatePerson } from 'services/person'
+import { getProducts } from 'services/product'
 
-const calculateAmountPerPerson = (table: ITable, items: IItem[]): ITable => {
+export interface ITable {
+  [key: string]: number
+}
+
+const calculateAmountPerPerson = (): void => {
+  const persons = getPersons()
+  const products = getProducts()
+
   const newTable: ITable = {}
-  const tableKeys = Object.keys(table)
 
-  for (let tableIndex = 0; tableIndex < tableKeys.length; tableIndex += 1) {
-    const personName = tableKeys[tableIndex]
+  for (let i = 0; i < persons.length; i += 1) {
+    const { id: personId } = persons[i]
 
-    for (let itemIndex = 0; itemIndex < items.length; itemIndex += 1) {
-      const currentItem = items[itemIndex]
-      const personHasConsumedItem = currentItem.names.includes(personName)
+    const isNewPerson = Boolean(!newTable[personId])
+    if (isNewPerson) {
+      newTable[personId] = 0
+    }
+
+    for (let j = 0; j < products.length; j += 1) {
+      const currentProduct = products[j]
+      const personHasConsumedItem = currentProduct.consumedBy.includes(personId)
 
       if (personHasConsumedItem) {
-        const isNewPerson = Boolean(!newTable[personName])
+        const amountOfPeopleSharingTheItem = currentProduct.consumedBy.length
+        const valuePerPerson = currentProduct.value / amountOfPeopleSharingTheItem
 
-        if (isNewPerson) {
-          newTable[personName] = { amount: 0 }
-        }
-
-        const personInfo = newTable[personName]
-        const amountOfPeopleSharingTheItem = currentItem.names.length
-        const valuePerPerson = currentItem.value / amountOfPeopleSharingTheItem
-
-        if (personInfo.amount) {
-          personInfo.amount += valuePerPerson
+        if (newTable[personId]) {
+          newTable[personId] += valuePerPerson
         } else {
-          personInfo.amount = valuePerPerson
-        }
-      } else {
-        const isNewPerson = Boolean(!newTable[personName])
-
-        if (isNewPerson) {
-          newTable[personName] = { amount: 0 }
+          newTable[personId] = valuePerPerson
         }
       }
     }
   }
 
-  return { ...newTable }
+  const tableKeys = Object.keys(newTable)
+
+  for (let i = 0; i < tableKeys.length; i += 1) {
+    const personId = tableKeys[i]
+    updatePerson(personId, { amount: newTable[personId] })
+  }
 }
 
 export default calculateAmountPerPerson

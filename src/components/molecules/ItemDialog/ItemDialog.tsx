@@ -3,21 +3,17 @@ import { Grid } from '@mui/material'
 import { useForm } from 'react-hook-form'
 import { yupResolver } from '@hookform/resolvers/yup'
 import * as yup from 'yup'
-
-export interface INewItemFormData {
-  title: string
-  value: string
-}
+import { ICreateProduct } from 'db/localStorage'
 
 interface INewItemDialogProps {
   open: boolean
   onClose: () => void
-  onSubmit: (data: INewItemFormData) => void
+  onSubmit: (data: ICreateProduct) => void
 }
 
 const schema = yup
   .object({
-    title: yup.string().required('Informe o título do item'),
+    name: yup.string().required('Informe o título do item'),
     value: yup
       .number()
       .typeError('Apenas números [0-9] e use ponto como separador')
@@ -33,10 +29,10 @@ const ItemDialog = ({ open, onClose, onSubmit }: INewItemDialogProps) => {
     formState: { errors },
   } = useForm({ resolver: yupResolver(schema) })
 
-  const handleSubmitForm = (data: INewItemFormData) => {
+  const handleSubmitForm = (data: ICreateProduct) => {
     onClose()
     onSubmit(data)
-    reset({ title: '', value: 0 })
+    reset({ name: '', value: null })
   }
 
   return (
@@ -48,9 +44,9 @@ const ItemDialog = ({ open, onClose, onSubmit }: INewItemDialogProps) => {
           fullWidth
           autoFocus
           label="Título"
-          error={Boolean(errors.title)}
-          helperText={errors.title?.message}
-          {...register('title')}
+          error={Boolean(errors.name)}
+          helperText={errors.name?.message}
+          {...register('name')}
         />
       </Box>
 
