@@ -1,18 +1,19 @@
 import { useEffect, useState } from 'react'
 import { Box, Button, Container, Grid } from '@mui/material'
-import PersonAddIcon from '@mui/icons-material/PersonAdd'
+
 import AddShoppingCartIcon from '@mui/icons-material/AddShoppingCart'
+import PersonAddIcon from '@mui/icons-material/PersonAdd'
 
-import ItemDialog from 'components/molecules/ItemDialog/ItemDialog'
-import UserActions from 'components/molecules/UserActions/UserActions'
-import PersonDialog from 'components/molecules/PersonDialog'
-import Person from 'components/molecules/Person'
 import Item from 'components/molecules/Item'
+import ItemDialog from 'components/molecules/ItemDialog/ItemDialog'
+import Person from 'components/molecules/Person'
+import PersonDialog from 'components/molecules/PersonDialog'
+import UserActions from 'components/molecules/UserActions/UserActions'
 
-import calculateAmountPerPerson from 'utils/calculateAmountPerPerson'
+import { createPerson, getPersons } from 'services/person'
 import { createProduct, getPopulatedProducts } from 'services/product'
 import { ICreatePerson, ICreateProduct, IPerson, IProductPopulated } from 'db/localStorage'
-import { createPerson, getPersons } from 'services/person'
+import calculateAmountPerPerson from 'utils/calculateAmountPerPerson'
 
 export interface IItem {
   title: string

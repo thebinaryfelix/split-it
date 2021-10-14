@@ -86,20 +86,4 @@ export const updateProduct = (id: string, data: IUpdateProduct): void => {
   })
 
   setItem(productsPath, { products: [...productsCopy] })
-
-  // if (updatedConsumers.length) {
-  //   for (let i = 0; i < updatedConsumers.length; i += 1) {
-  //     const personId = updatedConsumers[i]
-  //     const person = getPerson(personId)
-
-  //     if (person) {
-  //       const pricePerPerson = originalProduct.value / updatedConsumers.length
-
-  //       updatePerson(personId, {
-  //         ...person,
-  //         amount: person.amount + pricePerPerson,
-  //       })
-  //     }
-  //   }
-  // }
 }
