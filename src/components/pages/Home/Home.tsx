@@ -1,6 +1,5 @@
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import { Box, Button, Container, Grid } from '@mui/material'
-
 import AddShoppingCartIcon from '@mui/icons-material/AddShoppingCart'
 import PersonAddIcon from '@mui/icons-material/PersonAdd'
 
@@ -10,50 +9,37 @@ import Person from 'components/molecules/Person'
 import PersonDialog from 'components/molecules/PersonDialog'
 import UserActions from 'components/molecules/UserActions/UserActions'
 
-import { createPerson, getPersons } from 'services/person'
-import { createProduct, getPopulatedProducts } from 'services/product'
-import { ICreatePerson, ICreateProduct, IPerson, IProductPopulated } from 'db/interfaces'
-import calculateAmountPerPerson from 'utils/calculateAmountPerPerson'
+import { usePersons, useProducts } from 'utils'
 
 const Home = () => {
-  const [products, setProducts] = useState<IProductPopulated[]>([])
-  const [persons, setPersons] = useState<IPerson[]>([])
+  const { persons, calculateAmountPerPerson, updatePersons, createPerson } = usePersons()
+  const { products, createProduct } = useProducts()
+
   const [openItemDialog, setOpenItemDialog] = useState(false)
   const [openPersonDialog, setOpenPersonDialog] = useState(false)
-
-  const handleCreatePerson = ({ name }: ICreatePerson) => {
-    createPerson({ name })
-  }
-
-  const handleCreateProduct = ({ name, value }: ICreateProduct) => {
-    createProduct({ name, value })
-  }
 
   const userActions = [
     { icon: <AddShoppingCartIcon />, name: 'Novo item', onClick: () => setOpenItemDialog(true) },
     { icon: <PersonAddIcon />, name: 'Nova pessoa', onClick: () => setOpenPersonDialog(true) },
   ]
 
-  useEffect(() => {
-    const productsData = getPopulatedProducts()
-    const personsData = getPersons()
-
-    setProducts(productsData)
-    setPersons(personsData)
-  }, [])
+  const handleCalculateAmount = () => {
+    const newAmountsPerPerson = calculateAmountPerPerson()
+    updatePersons(newAmountsPerPerson)
+  }
 
   return (
     <Container>
       <PersonDialog
         open={openPersonDialog}
         onClose={() => setOpenPersonDialog(false)}
-        onSubmit={handleCreatePerson}
+        onSubmit={createPerson}
       />
 
       <ItemDialog
         open={openItemDialog}
         onClose={() => setOpenItemDialog(false)}
-        onSubmit={handleCreateProduct}
+        onSubmit={createProduct}
       />
 
       <Box p={2}>
@@ -78,7 +64,7 @@ const Home = () => {
         </Grid>
 
         <Box mt={4}>
-          <Button variant="contained" color="primary" onClick={calculateAmountPerPerson}>
+          <Button variant="contained" color="primary" onClick={handleCalculateAmount}>
             Calcular
           </Button>
         </Box>

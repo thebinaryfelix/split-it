@@ -1,8 +1,8 @@
 import { Box, Dialog, DialogTitle, Typography, Grid, Paper, IconButton } from '@mui/material'
 import AddIcon from '@mui/icons-material/Add'
 import { IPerson } from 'db/interfaces'
-import { getPersons } from 'services/person'
 import { useEffect, useState } from 'react'
+import { usePersons } from 'utils'
 
 interface IAddPersonToItemDialogProps {
   open: boolean
@@ -17,13 +17,24 @@ const AddPersonToItemDialog = ({
   onSubmit,
   productId,
 }: IAddPersonToItemDialogProps) => {
-  const [persons, setPersons] = useState<IPerson[]>([])
+  const { persons } = usePersons()
+
+  const [availablePersons, setAvailablePersons] = useState<IPerson[]>([])
+
+  const handleSubmit = (id: string) => {
+    onSubmit(productId, id)
+
+    setAvailablePersons(prev => {
+      const personIndex = availablePersons.findIndex(person => person.id === id)
+      const availablePersonsCopy = [...prev]
+      availablePersonsCopy.splice(personIndex, 1)
+      return [...availablePersonsCopy]
+    })
+  }
 
   useEffect(() => {
-    const personsData = getPersons()
-
-    setPersons(personsData)
-  }, [])
+    setAvailablePersons(persons)
+  }, [persons])
 
   return (
     <Dialog onClose={onClose} open={open}>
@@ -31,12 +42,12 @@ const AddPersonToItemDialog = ({
 
       <Box p={2}>
         <Grid container spacing={2}>
-          {Boolean(persons?.length) &&
-            persons.map(({ id, name }) => (
+          {Boolean(availablePersons?.length) &&
+            availablePersons.map(({ id, name }) => (
               <Grid key={id} item xs={4}>
                 <Paper>
                   <Box p={2}>
-                    <IconButton onClick={() => onSubmit(productId, id)}>
+                    <IconButton onClick={() => handleSubmit(id)}>
                       <AddIcon />
                     </IconButton>
 

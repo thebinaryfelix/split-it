@@ -1,10 +1,3 @@
-export interface IProduct {
-  id: string
-  name: string
-  value: number
-  consumedBy: string[]
-}
-
 export interface IProductPopulated {
   id: string
   name: string
@@ -20,7 +13,7 @@ export interface ICreateProduct {
 export interface IUpdateProduct {
   name?: string
   value?: number
-  consumedBy?: string
+  consumedBy?: IPerson
 }
 
 export interface IPerson {
@@ -30,8 +23,8 @@ export interface IPerson {
 }
 
 export interface IUpdatePerson {
-  name?: string
-  amount?: number
+  id: string
+  amount: number
 }
 
 export interface ICreatePerson {

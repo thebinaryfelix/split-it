@@ -4,26 +4,13 @@ import { getItem, setItem, workspace } from 'db/localStorage'
 
 const personsPath = `${workspace}.persons`
 
-export const createPerson = (person: ICreatePerson): void => {
-  const newPerson: IPerson = { ...person, id: uuidv4(), amount: 0 }
-
-  const { persons } = getItem(personsPath)
-
-  if (!persons) {
-    setItem(personsPath, { persons: [newPerson] })
-  } else {
-    setItem(personsPath, { persons: [...persons, newPerson] })
-  }
+export const createPerson = (person: ICreatePerson): IPerson => {
+  return { ...person, id: uuidv4(), amount: 0 }
 }
 
 export const getPersons = (): IPerson[] => {
   const { persons } = getItem(personsPath)
   return persons ?? []
-}
-
-export const getPerson = (id: string): IPerson | undefined => {
-  const persons = getPersons()
-  return persons.find(person => person.id === id)
 }
 
 export const deletePerson = (id: string): void => {

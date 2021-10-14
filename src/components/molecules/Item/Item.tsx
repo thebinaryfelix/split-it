@@ -1,3 +1,4 @@
+import { useState } from 'react'
 import {
   Button,
   Box,
@@ -9,13 +10,12 @@ import {
   AccordionDetails,
 } from '@mui/material'
 import AddIcon from '@mui/icons-material/Add'
-import NumberFormat from 'react-number-format'
-import { useState } from 'react'
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore'
 import DeleteIcon from '@mui/icons-material/Delete'
-import AddPersonToItemDialog from '../AddPersonToItemDialog'
-import { deleteProduct, updateProduct } from 'services/product'
+import NumberFormat from 'react-number-format'
 import { IPerson } from 'db/interfaces'
+import { usePersons, useProducts } from 'utils'
+import AddPersonToItemDialog from '../AddPersonToItemDialog'
 
 interface ItemProps {
   id: string
@@ -25,11 +25,17 @@ interface ItemProps {
 }
 
 const Item = ({ id, title, value, consumedBy }: ItemProps) => {
+  const { deleteProduct, updateProduct } = useProducts()
+  const { getPerson } = usePersons()
+
   const [openPersonToItem, setOpenPersonToItem] = useState(false)
   const [expanded, setExpanded] = useState(false)
 
   const handleSubmitPersonToItem = (productId: string, personId: string) => {
-    updateProduct(productId, { consumedBy: personId })
+    const person = getPerson(personId)
+    if (person) {
+      updateProduct(productId, { consumedBy: { ...person } })
+    }
   }
 
   const handleDelete = () => {
