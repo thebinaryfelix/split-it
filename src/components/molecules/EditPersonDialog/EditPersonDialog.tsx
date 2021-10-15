@@ -1,63 +1,46 @@
-import { Button, Box, Dialog, DialogTitle, TextField } from '@material-ui/core'
-import { Grid } from '@mui/material'
 import { useForm } from 'react-hook-form'
 import { yupResolver } from '@hookform/resolvers/yup'
 import * as yup from 'yup'
-import { ICreateProduct } from 'db/interfaces'
+import { IUpdatePerson } from 'db/interfaces'
+import { Box, Button, Dialog, DialogTitle, Grid, TextField } from '@mui/material'
 
-interface INewItemDialogProps {
+interface EditPersonDialogProps {
   open: boolean
   onClose: () => void
-  onSubmit: (data: ICreateProduct) => void
+  onSubmit: (data: IUpdatePerson) => void
+  defaultValues?: { name?: string }
 }
 
 const schema = yup
   .object({
-    name: yup.string().required('Informe o título do item'),
-    value: yup
-      .number()
-      .typeError('Apenas números [0-9] e use ponto como separador')
-      .required('Informe o valor do item'),
+    name: yup.string().required('Informe um nome'),
   })
   .required()
 
-const ItemDialog = ({ open, onClose, onSubmit }: INewItemDialogProps) => {
+const EditPersonDialog = ({ open, onClose, onSubmit, defaultValues }: EditPersonDialogProps) => {
   const {
     register,
     handleSubmit,
-    reset,
     formState: { errors },
-  } = useForm({ resolver: yupResolver(schema) })
+  } = useForm({ resolver: yupResolver(schema), defaultValues })
 
-  const handleSubmitForm = (data: ICreateProduct) => {
+  const handleSubmitForm = (data: IUpdatePerson) => {
     onClose()
     onSubmit(data)
-    reset({ name: '', value: null })
   }
 
   return (
     <Dialog onClose={onClose} open={open}>
-      <DialogTitle>Adicionar novo Item</DialogTitle>
+      <DialogTitle>Editar pessoa</DialogTitle>
 
       <Box p={2}>
         <TextField
           fullWidth
           autoFocus
-          label="Título"
+          label="Nome"
           error={Boolean(errors.name)}
           helperText={errors.name?.message}
           {...register('name')}
-        />
-      </Box>
-
-      <Box p={2}>
-        <TextField
-          fullWidth
-          label="Valor"
-          error={Boolean(errors.value)}
-          helperText={errors.value?.message}
-          type="tel"
-          {...register('value')}
         />
       </Box>
 
@@ -85,4 +68,4 @@ const ItemDialog = ({ open, onClose, onSubmit }: INewItemDialogProps) => {
   )
 }
 
-export default ItemDialog
+export default EditPersonDialog

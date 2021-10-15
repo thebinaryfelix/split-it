@@ -8,14 +8,16 @@ import {
   Accordion,
   AccordionSummary,
   AccordionDetails,
+  IconButton,
 } from '@mui/material'
 import AddIcon from '@mui/icons-material/Add'
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore'
 import DeleteIcon from '@mui/icons-material/Delete'
 import NumberFormat from 'react-number-format'
+import AddPersonToItemDialog from 'components/molecules/AddPersonToItemDialog'
 import { IPerson } from 'db/interfaces'
 import { usePersons, useProducts } from 'utils'
-import AddPersonToItemDialog from '../AddPersonToItemDialog'
+import DeleteItemDialog from 'components/molecules/DeleteItemDialog'
 
 interface ItemProps {
   id: string
@@ -25,10 +27,11 @@ interface ItemProps {
 }
 
 const Item = ({ id, title, value, consumedBy }: ItemProps) => {
-  const { deleteProduct, updateProduct } = useProducts()
+  const { deleteProduct, updateProduct, deleteConsumer } = useProducts()
   const { getPerson } = usePersons()
 
   const [openPersonToItem, setOpenPersonToItem] = useState(false)
+  const [openDeleteItemDialog, setOpenDeleteItemDialog] = useState(false)
   const [expanded, setExpanded] = useState(false)
 
   const handleSubmitPersonToItem = (productId: string, personId: string) => {
@@ -42,6 +45,14 @@ const Item = ({ id, title, value, consumedBy }: ItemProps) => {
     deleteProduct(id)
   }
 
+  const handleDeleteConsumer = (personId: string) => {
+    deleteConsumer(id, personId)
+  }
+
+  const handleConfirmItemDeletion = () => {
+    handleDelete()
+  }
+
   return (
     <>
       <AddPersonToItemDialog
@@ -51,13 +62,17 @@ const Item = ({ id, title, value, consumedBy }: ItemProps) => {
         onClose={() => setOpenPersonToItem(false)}
       />
 
+      <DeleteItemDialog
+        open={openDeleteItemDialog}
+        onConfirm={handleConfirmItemDeletion}
+        onCancel={() => setOpenDeleteItemDialog(false)}
+      />
+
       <Card>
         <CardContent>
           <Box display="flex" justifyContent="space-between">
             <Box>
-              <Typography color="text.secondary" gutterBottom>
-                {title}
-              </Typography>
+              <Typography gutterBottom>{title}</Typography>
 
               <NumberFormat
                 prefix="R$ "
@@ -66,20 +81,18 @@ const Item = ({ id, title, value, consumedBy }: ItemProps) => {
                 value={value.toFixed(2)}
                 allowNegative={false}
                 renderText={(formattedValue: string) => (
-                  <Typography color="text.secondary" gutterBottom>
-                    {formattedValue}
-                  </Typography>
+                  <Typography gutterBottom>{formattedValue}</Typography>
                 )}
               />
             </Box>
 
             <Box>
-              <Button onClick={() => setOpenPersonToItem(true)} size="small">
-                <AddIcon />
+              <Button onClick={() => setOpenDeleteItemDialog(true)} color="error">
+                <DeleteIcon />
               </Button>
 
-              <Button onClick={handleDelete} size="small">
-                <DeleteIcon />
+              <Button onClick={() => setOpenPersonToItem(true)} color="success">
+                <AddIcon />
               </Button>
             </Box>
           </Box>
@@ -91,8 +104,19 @@ const Item = ({ id, title, value, consumedBy }: ItemProps) => {
               </AccordionSummary>
 
               <AccordionDetails>
-                {consumedBy.map(({ id, name }) => (
-                  <Typography key={id}>{name}</Typography>
+                {consumedBy.map(({ id: consumerId, name }) => (
+                  <Box
+                    key={consumerId}
+                    display="flex"
+                    justifyContent="space-between"
+                    alignItems="center"
+                    p={1}
+                  >
+                    <Typography>{name}</Typography>
+                    <IconButton color="error" onClick={() => handleDeleteConsumer(consumerId)}>
+                      <DeleteIcon />
+                    </IconButton>
+                  </Box>
                 ))}
               </AccordionDetails>
             </Accordion>

@@ -1,14 +1,32 @@
-import { Box, Dialog, DialogTitle, Typography, Grid, Paper, IconButton } from '@mui/material'
+import {
+  Box,
+  Dialog,
+  DialogTitle,
+  Typography,
+  Grid,
+  Paper,
+  IconButton,
+  DialogContent,
+  DialogActions,
+  Button,
+} from '@mui/material'
 import AddIcon from '@mui/icons-material/Add'
 import { IPerson } from 'db/interfaces'
 import { useEffect, useState } from 'react'
-import { usePersons } from 'utils'
+import { usePersons, useProducts } from 'utils'
 
 interface IAddPersonToItemDialogProps {
   open: boolean
   onClose: () => void
   onSubmit: (productId: string, personId: string) => void
   productId: string
+}
+
+const getAvailablePersons = (persons: IPerson[], consumedBy: IPerson[]): IPerson[] | [] => {
+  const available = persons.filter(person =>
+    Boolean(!consumedBy.find(consumer => consumer.id === person.id)),
+  )
+  return [...available]
 }
 
 const AddPersonToItemDialog = ({
@@ -18,6 +36,7 @@ const AddPersonToItemDialog = ({
   productId,
 }: IAddPersonToItemDialogProps) => {
   const { persons } = usePersons()
+  const { getProduct } = useProducts()
 
   const [availablePersons, setAvailablePersons] = useState<IPerson[]>([])
 
@@ -33,12 +52,30 @@ const AddPersonToItemDialog = ({
   }
 
   useEffect(() => {
-    setAvailablePersons(persons)
-  }, [persons])
+    const product = getProduct(productId)
+    if (product) {
+      setAvailablePersons([...getAvailablePersons(persons, product.consumedBy)])
+    }
+  }, [getProduct, persons, productId])
 
   return (
     <Dialog onClose={onClose} open={open}>
-      <DialogTitle>Quem consumiu esse item?</DialogTitle>
+      <DialogTitle>
+        {availablePersons.length ? 'Quem consumiu esse item?' : 'Alguém mais consumiu esse item?'}
+      </DialogTitle>
+
+      {Boolean(!availablePersons.length) && (
+        <>
+          <DialogContent>
+            Não há mais pessoas para adicionar a este item. Adicione mais pessoas à conta para poder
+            incluí-las aqui.
+          </DialogContent>
+
+          <DialogActions>
+            <Button onClick={onClose}>Fechar</Button>
+          </DialogActions>
+        </>
+      )}
 
       <Box p={2}>
         <Grid container spacing={2}>

@@ -28,11 +28,19 @@ const usePersons = () => {
 
   const updatePersons = (data: IUpdatePerson[]): void => {
     const updatedPersons = persons.map(person => {
-      const personToUpdate = data.find(newPerson => newPerson.id === person.id)
-      return personToUpdate ? { ...person, ...personToUpdate } : { ...person }
+      const dataToUpdate = data.find(newPerson => newPerson.id === person.id)
+      return dataToUpdate ? { ...person, ...dataToUpdate } : { ...person }
     })
 
-    updateStore({ persons: [...updatedPersons] })
+    const updatedProducts = products.map(product => {
+      const updatedConsumers = product.consumedBy.map(consumer => {
+        const dataToUpdate = data.find(newPerson => newPerson.id === consumer.id)
+        return dataToUpdate ? { ...consumer, ...dataToUpdate } : { ...consumer }
+      })
+      return { ...product, consumedBy: [...updatedConsumers] }
+    })
+
+    updateStore({ persons: [...updatedPersons], products: [...updatedProducts] })
   }
 
   const calculateAmountPerPerson = () => {

@@ -24,7 +24,8 @@ export interface IPerson {
 
 export interface IUpdatePerson {
   id: string
-  amount: number
+  amount?: number
+  name?: string
 }
 
 export interface ICreatePerson {
