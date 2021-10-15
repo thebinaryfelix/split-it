@@ -28,3 +28,4 @@ Install dependencies and initiate.
 ```bash
 yarn install && yarn start
 ```
+
