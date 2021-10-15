@@ -6,7 +6,7 @@ const lightTheme = createTheme({
       main: '#2886a4',
     },
     secondary: {
-      main: '#a44728',
+      main: '#A36627',
     },
     background: {
       default: '#f7f7f7',
