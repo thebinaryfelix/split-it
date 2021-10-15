@@ -1,21 +1,24 @@
 import { Box, CssBaseline } from '@mui/material'
+import { Navbar, Footer } from 'components/templates'
 import Routes from 'components/routes/Routes'
-import Navbar from 'components/templates/Navbar'
 import StoreProvider from 'store/store'
+import ThemeProvider from 'themes/ThemeProvider'
 import './App.css'
 
 const App = () => (
-  <>
-    <CssBaseline />
+  <StoreProvider>
+    <ThemeProvider>
+      <CssBaseline />
 
-    <StoreProvider>
       <Navbar />
 
       <Box mt={8}>
         <Routes />
       </Box>
-    </StoreProvider>
-  </>
+
+      <Footer />
+    </ThemeProvider>
+  </StoreProvider>
 )
 
 export default App
