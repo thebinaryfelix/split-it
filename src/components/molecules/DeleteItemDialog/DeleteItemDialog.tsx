@@ -8,15 +8,15 @@ interface DeleteItemDialogProps {
 
 const DeleteItemDialog = ({ open, onConfirm, onCancel }: DeleteItemDialogProps) => (
   <Dialog open={open}>
-    <DialogTitle>Tem certeza que quer deletar esse item?</DialogTitle>
+    <DialogTitle>Deletar esse item?</DialogTitle>
 
     <DialogActions>
       <Button variant="outlined" onClick={onConfirm}>
-        Sim, deletar
+        Sim
       </Button>
 
       <Button variant="contained" onClick={onCancel}>
-        Cancelar
+        Não
       </Button>
     </DialogActions>
   </Dialog>

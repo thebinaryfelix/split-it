@@ -1,4 +1,5 @@
-import { AppBar, Toolbar, Typography } from '@mui/material'
+import { AppBar, Button, Toolbar, Typography } from '@mui/material'
+import { usePersons, useProducts } from 'utils'
 // import { useState } from 'react'
 // import { Switch } from 'components/atoms'
 // import { useStore } from 'store/store'
@@ -6,7 +7,8 @@ import { AppBar, Toolbar, Typography } from '@mui/material'
 // TODO: implement dark theme with correct text contrast on Input
 
 const Navbar = () => {
-  // const { updateStore } = useStore()
+  const { persons, calculateAmountPerPerson, updatePersons } = usePersons()
+  const { products } = useProducts()
   // const [checked, setChecked] = useState(false)
 
   // const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -14,12 +16,28 @@ const Navbar = () => {
   //   updateStore({ theme: event.target.value })
   // }
 
+  const disableCalculateButton = Boolean(!persons.length) || Boolean(!products.length)
+
+  const handleCalculateAmount = () => {
+    const newAmountsPerPerson = calculateAmountPerPerson()
+    updatePersons(newAmountsPerPerson)
+  }
+
   return (
     <AppBar position="fixed">
-      <Toolbar>
-        <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
+      <Toolbar sx={{ justifyContent: 'space-between' }}>
+        <Typography variant="h6" component="div">
           Split-It!
         </Typography>
+
+        <Button
+          variant="contained"
+          color="secondary"
+          disabled={disableCalculateButton}
+          onClick={handleCalculateAmount}
+        >
+          Calcular
+        </Button>
 
         {/* <Switch
           checked={checked}
