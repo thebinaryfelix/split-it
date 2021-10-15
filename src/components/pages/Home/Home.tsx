@@ -1,128 +1,63 @@
 import { useState } from 'react'
 import { Box, Button, Container, Grid } from '@mui/material'
-import PersonAddIcon from '@mui/icons-material/PersonAdd'
 import AddShoppingCartIcon from '@mui/icons-material/AddShoppingCart'
-
-import { INewPersonFormData } from 'components/molecules/PersonDialog/PersonDialog'
-import AddPersonToItemDialog from 'components/molecules/AddPersonToItemDialog'
-import ItemDialog, { INewItemFormData } from 'components/molecules/ItemDialog/ItemDialog'
-import UserActions from 'components/molecules/UserActions/UserActions'
+import PersonAddIcon from '@mui/icons-material/PersonAdd'
+import Item from 'components/organisms/Item'
+import ItemDialog from 'components/molecules/ItemDialog/ItemDialog'
+import Person from 'components/organisms/Person'
 import PersonDialog from 'components/molecules/PersonDialog'
-import Person from 'components/molecules/Person'
-import Item from 'components/molecules/Item'
-
-import calculateAmountPerPerson from 'utils/calculateAmountPerPerson'
-
-export interface IItem {
-  title: string
-  value: number
-  names: string[]
-}
-
-export interface IPersonTableInfo {
-  amount: number
-}
-
-export interface ITable {
-  [key: string]: IPersonTableInfo
-}
+import UserActions from 'components/molecules/UserActions/UserActions'
+import { usePersons, useProducts } from 'utils'
 
 const Home = () => {
-  // TODO: use localStorage through a common API
-  const [items, setItems] = useState<IItem[]>([])
-  const [table, setTable] = useState<ITable>({})
+  const { persons, calculateAmountPerPerson, updatePersons, createPerson } = usePersons()
+  const { products, createProduct } = useProducts()
 
-  const [activeItem, setActiveItem] = useState('')
   const [openItemDialog, setOpenItemDialog] = useState(false)
   const [openPersonDialog, setOpenPersonDialog] = useState(false)
-  const [openPersonToItem, setOpenPersonToItem] = useState(false)
 
-  const disabledCalculateButton = Boolean(!items.length) || Boolean(!Object.keys(table).length)
-
-  // TODO: maybe move handlers to a custom hook
-  const handleSubmitNewPerson = ({ name }: INewPersonFormData) => {
-    setOpenPersonDialog(false)
-    setTable(prev => ({ ...prev, [name]: { amount: 0 } }))
-  }
-
-  const handleSubmitNewItem = ({ title, value }: INewItemFormData) => {
-    setOpenItemDialog(false)
-    setItems(prev => [...prev, { title, value: parseFloat(value), names: [] }])
-  }
-
-  const handleActiveItem = (title: string) => {
-    setOpenPersonToItem(true)
-    setActiveItem(title)
-  }
-
-  const handleSubmitPersonToItem = (name: string) => {
-    const itemToUpdate = items.find(({ title }) => title === activeItem)
-    itemToUpdate?.names.push(name)
-    setItems([...items])
-  }
-
-  const handleCalculate = () => {
-    const newTable = calculateAmountPerPerson(table, items)
-    setTable({ ...newTable })
-  }
-
-  const handleDeleteItem = (title: string) => {
-    const itemsCopy = [...items]
-    itemsCopy.splice(
-      items.findIndex(item => item.title === title),
-      1,
-    )
-    setItems([...itemsCopy])
-  }
+  const disableCalculateButton = Boolean(!persons.length) || Boolean(!products.length)
 
   const userActions = [
     { icon: <AddShoppingCartIcon />, name: 'Novo item', onClick: () => setOpenItemDialog(true) },
     { icon: <PersonAddIcon />, name: 'Nova pessoa', onClick: () => setOpenPersonDialog(true) },
   ]
 
+  const handleCalculateAmount = () => {
+    const newAmountsPerPerson = calculateAmountPerPerson()
+    updatePersons(newAmountsPerPerson)
+  }
+
   return (
     <Container>
       <PersonDialog
         open={openPersonDialog}
         onClose={() => setOpenPersonDialog(false)}
-        onSubmit={handleSubmitNewPerson}
+        onSubmit={createPerson}
       />
 
       <ItemDialog
         open={openItemDialog}
         onClose={() => setOpenItemDialog(false)}
-        onSubmit={handleSubmitNewItem}
-      />
-
-      <AddPersonToItemDialog
-        open={openPersonToItem}
-        onClose={() => setOpenPersonToItem(false)}
-        onSubmit={handleSubmitPersonToItem}
-        names={Object.keys(table)}
+        onSubmit={createProduct}
       />
 
       <Box p={2}>
         <Grid container spacing={4}>
           <Grid container item xs={12} spacing={2}>
-            {Boolean(Object.keys(table).length) &&
-              Object.keys(table).map(name => (
-                <Grid item xs={4} key={name}>
-                  <Person amount={table[name].amount} name={name} />
+            {Boolean(persons.length) &&
+              persons.map(({ id, name, amount }) => (
+                <Grid item xs={6} key={id}>
+                  <Person id={id} amount={amount} name={name} />
                 </Grid>
               ))}
           </Grid>
 
           <Grid container item xs={12} spacing={2}>
-            {Boolean(items.length) &&
-              items.map(({ title, value, names }) => (
-                <Grid item xs={12} key={title}>
-                  <Item
-                    title={title}
-                    value={value}
-                    names={names}
-                    onClick={handleActiveItem}
-                    onDelete={handleDeleteItem}
-                  />
+            {Boolean(products.length) &&
+              products.map(({ id, name, value, consumedBy }) => (
+                <Grid item xs={12} key={id}>
+                  <Item id={id} title={name} value={value} consumedBy={consumedBy} />
                 </Grid>
               ))}
           </Grid>
@@ -132,8 +67,8 @@ const Home = () => {
           <Button
             variant="contained"
             color="primary"
-            onClick={handleCalculate}
-            disabled={disabledCalculateButton}
+            disabled={disableCalculateButton}
+            onClick={handleCalculateAmount}
           >
             Calcular
           </Button>
