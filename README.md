@@ -8,21 +8,10 @@ An app to help you split values of a given item between those people who consume
 
 ## How to use it
 
-### Step 1
-
-Create a new item and define its title and value (the cost).
-
-### Step 2
-
-Create a new person for everyone who will share this item.
-
-### Step 3
-
-Assign the persons to the item.
-
-### Step 4
-
-Click on **Calculate** button
+- Create a new item and define its title and value (the cost).
+- Create a new person for everyone who will share this item.
+- Assign the persons to the item.
+- Click on **Calculate** button
 
 ## Execute locally
 
