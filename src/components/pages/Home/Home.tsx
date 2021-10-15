@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { Box, Button, Container, Grid } from '@mui/material'
+import { Box, Container, Grid } from '@mui/material'
 import AddShoppingCartIcon from '@mui/icons-material/AddShoppingCart'
 import PersonAddIcon from '@mui/icons-material/PersonAdd'
 import Item from 'components/organisms/Item'
@@ -10,23 +10,16 @@ import UserActions from 'components/molecules/UserActions/UserActions'
 import { usePersons, useProducts } from 'utils'
 
 const Home = () => {
-  const { persons, calculateAmountPerPerson, updatePersons, createPerson } = usePersons()
+  const { persons, createPerson } = usePersons()
   const { products, createProduct } = useProducts()
 
   const [openItemDialog, setOpenItemDialog] = useState(false)
   const [openPersonDialog, setOpenPersonDialog] = useState(false)
 
-  const disableCalculateButton = Boolean(!persons.length) || Boolean(!products.length)
-
   const userActions = [
     { icon: <AddShoppingCartIcon />, name: 'Novo item', onClick: () => setOpenItemDialog(true) },
     { icon: <PersonAddIcon />, name: 'Nova pessoa', onClick: () => setOpenPersonDialog(true) },
   ]
-
-  const handleCalculateAmount = () => {
-    const newAmountsPerPerson = calculateAmountPerPerson()
-    updatePersons(newAmountsPerPerson)
-  }
 
   return (
     <Container>
@@ -62,17 +55,6 @@ const Home = () => {
               ))}
           </Grid>
         </Grid>
-
-        <Box mt={4}>
-          <Button
-            variant="contained"
-            color="primary"
-            disabled={disableCalculateButton}
-            onClick={handleCalculateAmount}
-          >
-            Calcular
-          </Button>
-        </Box>
       </Box>
 
       <UserActions actions={userActions} />

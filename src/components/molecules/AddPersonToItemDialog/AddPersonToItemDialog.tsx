@@ -81,7 +81,7 @@ const AddPersonToItemDialog = ({
         <Grid container spacing={2}>
           {Boolean(availablePersons?.length) &&
             availablePersons.map(({ id, name }) => (
-              <Grid key={id} item xs={4}>
+              <Grid key={id} item xs={6}>
                 <Paper>
                   <Box p={2}>
                     <IconButton onClick={() => handleSubmit(id)}>
